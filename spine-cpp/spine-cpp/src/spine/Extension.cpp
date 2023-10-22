@@ -34,15 +34,15 @@
 
 using namespace spine;
 
-SpineExtension *SpineExtension::_instance = NULL;
+SpineExtension* SpineExtension::_instance = NULL;
 
-void SpineExtension::setInstance(SpineExtension *inValue) {
+void SpineExtension::setInstance(SpineExtension* inValue) {
 	assert(inValue);
 
 	_instance = inValue;
 }
 
-SpineExtension *SpineExtension::getInstance() {
+SpineExtension* SpineExtension::getInstance() {
 	if (!_instance) _instance = spine::getDefaultExtension();
 	assert(_instance);
 
@@ -58,35 +58,35 @@ SpineExtension::SpineExtension() {
 DefaultSpineExtension::~DefaultSpineExtension() {
 }
 
-void *DefaultSpineExtension::_alloc(size_t size, const char *file, int line) {
+void* DefaultSpineExtension::_alloc(size_t size, const char* file, int line) {
 	SP_UNUSED(file);
 	SP_UNUSED(line);
 
 	if (size == 0)
 		return 0;
-	void *ptr = ::malloc(size);
+	void* ptr = ::malloc(size);
 	return ptr;
 }
 
-void *DefaultSpineExtension::_calloc(size_t size, const char *file, int line) {
+void* DefaultSpineExtension::_calloc(size_t size, const char* file, int line) {
 	SP_UNUSED(file);
 	SP_UNUSED(line);
 
 	if (size == 0)
 		return 0;
 
-	void *ptr = ::malloc(size);
+	void* ptr = ::malloc(size);
 	if (ptr) {
 		memset(ptr, 0, size);
 	}
 	return ptr;
 }
 
-void *DefaultSpineExtension::_realloc(void *ptr, size_t size, const char *file, int line) {
+void* DefaultSpineExtension::_realloc(void* ptr, size_t size, const char* file, int line) {
 	SP_UNUSED(file);
 	SP_UNUSED(line);
 
-	void *mem = NULL;
+	void* mem = NULL;
 	if (size == 0)
 		return 0;
 	if (ptr == NULL)
@@ -96,21 +96,21 @@ void *DefaultSpineExtension::_realloc(void *ptr, size_t size, const char *file, 
 	return mem;
 }
 
-void DefaultSpineExtension::_free(void *mem, const char *file, int line) {
+void DefaultSpineExtension::_free(void* mem, const char* file, int line) {
 	SP_UNUSED(file);
 	SP_UNUSED(line);
 
 	::free(mem);
 }
 
-char *DefaultSpineExtension::_readFile(const String &path, int *length) {
+char* DefaultSpineExtension::_readFile(const String& path, int* length) {
 #ifndef __EMSCRIPTEN__
-	char *data;
-	FILE *file = fopen(path.buffer(), "rb");
+	char* data;
+	FILE* file = fopen(path.buffer(), "rb");
 	if (!file) return 0;
 
 	fseek(file, 0, SEEK_END);
-	*length = (int) ftell(file);
+	*length = (int)ftell(file);
 	fseek(file, 0, SEEK_SET);
 
 	data = SpineExtension::alloc<char>(*length, __FILE__, __LINE__);
@@ -124,4 +124,8 @@ char *DefaultSpineExtension::_readFile(const String &path, int *length) {
 }
 
 DefaultSpineExtension::DefaultSpineExtension() : SpineExtension() {
+}
+
+spine::SpineExtension* spine::getDefaultExtension() {
+	return new spine::DefaultSpineExtension();
 }

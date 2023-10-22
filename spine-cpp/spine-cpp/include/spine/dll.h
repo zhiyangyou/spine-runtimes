@@ -42,6 +42,8 @@
 #endif
 #endif
 
+#define SPINEPLUGIN_API  DLLEXPORT
+
 #ifdef SPINEPLUGIN_API
 #define SP_API SPINEPLUGIN_API
 #else
