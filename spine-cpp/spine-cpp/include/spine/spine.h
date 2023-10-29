@@ -106,5 +106,5 @@
 #include <spine/Vector.h>
 #include <spine/VertexAttachment.h>
 #include <spine/Vertices.h>
-
+#include <spine/UnitySpineCppExtension.h>
 #endif

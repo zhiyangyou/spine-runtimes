@@ -186,6 +186,10 @@ namespace spine {
 			return _buffer;
 		}
 
+		inline void* voidPBuffer() {
+			return _buffer;
+		}
+
 	private:
 		size_t _size;
 		size_t _capacity;
