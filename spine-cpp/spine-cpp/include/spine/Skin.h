@@ -42,6 +42,50 @@ namespace spine {
 
 	class ConstraintData;
 
+	struct SP_API SkinEntry {
+		size_t _slotIndex;
+		String _name;
+		Attachment* _attachment;
+
+		SkinEntry(size_t slotIndex, const String& name, Attachment* attachment) :
+			_slotIndex(slotIndex),
+			_name(name),
+			_attachment(attachment) {
+		}
+	};
+
+	class SP_API SkinEntries {
+		friend class AttachmentMap;
+
+	public:
+		bool hasNext() {
+			while (true) {
+				if (_slotIndex >= _buckets.size()) return false;
+				if (_bucketIndex >= _buckets[_slotIndex].size()) {
+					_bucketIndex = 0;
+					++_slotIndex;
+					continue;
+				};
+				return true;
+			}
+		}
+
+		SkinEntry& next() {
+			SkinEntry& result = _buckets[_slotIndex][_bucketIndex];
+			++_bucketIndex;
+			return result;
+		}
+
+		public:
+		SkinEntries(Vector <Vector<SkinEntry>>& buckets) : _buckets(buckets), _slotIndex(0), _bucketIndex(0) {
+		}
+
+	private:
+		Vector <Vector<SkinEntry>>& _buckets;
+		size_t _slotIndex;
+		size_t _bucketIndex;
+	};
+
 /// Stores attachments by slot index and attachment name.
 /// See SkeletonData::getDefaultSkin, Skeleton::getSkin, and
 /// http://esotericsoftware.com/spine-runtime-skins in the Spine Runtimes Guide.
@@ -53,49 +97,7 @@ namespace spine {
 			friend class Skin;
 
 		public:
-			struct SP_API Entry {
-				size_t _slotIndex;
-				String _name;
-				Attachment *_attachment;
 
-				Entry(size_t slotIndex, const String &name, Attachment *attachment) :
-						_slotIndex(slotIndex),
-						_name(name),
-						_attachment(attachment) {
-				}
-			};
-
-			class SP_API Entries {
-				friend class AttachmentMap;
-
-			public:
-				bool hasNext() {
-					while (true) {
-						if (_slotIndex >= _buckets.size()) return false;
-						if (_bucketIndex >= _buckets[_slotIndex].size()) {
-							_bucketIndex = 0;
-							++_slotIndex;
-							continue;
-						};
-						return true;
-					}
-				}
-
-				Entry &next() {
-					Entry &result = _buckets[_slotIndex][_bucketIndex];
-					++_bucketIndex;
-					return result;
-				}
-
-			protected:
-				Entries(Vector <Vector<Entry>> &buckets) : _buckets(buckets), _slotIndex(0), _bucketIndex(0) {
-				}
-
-			private:
-				Vector <Vector<Entry>> &_buckets;
-				size_t _slotIndex;
-				size_t _bucketIndex;
-			};
 
 			void put(size_t slotIndex, const String &attachmentName, Attachment *attachment);
 
@@ -103,16 +105,16 @@ namespace spine {
 
 			void remove(size_t slotIndex, const String &attachmentName);
 
-			Entries getEntries();
+			SkinEntries getEntries();
 
 		protected:
 			AttachmentMap();
 
 		private:
 
-			int findInBucket(Vector <Entry> &, const String &attachmentName);
+			int findInBucket(Vector <SkinEntry> &, const String &attachmentName);
 
-			Vector <Vector<Entry>> _buckets;
+			Vector <Vector<SkinEntry>> _buckets;
 		};
 
 		explicit Skin(const String &name);
@@ -147,7 +149,7 @@ namespace spine {
 		/// Adds all attachments, bones, and constraints from the specified skin to this skin. Attachments are deep copied.
 		void copySkin(Skin *other);
 
-		AttachmentMap::Entries getAttachments();
+		SkinEntries getAttachments();
 
 		Vector<BoneData *> &getBones();
 

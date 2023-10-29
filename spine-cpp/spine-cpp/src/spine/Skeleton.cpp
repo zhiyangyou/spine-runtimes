@@ -640,10 +640,10 @@ void Skeleton::sortTransformConstraint(TransformConstraint *constraint) {
 }
 
 void Skeleton::sortPathConstraintAttachment(Skin *skin, size_t slotIndex, Bone &slotBone) {
-	Skin::AttachmentMap::Entries attachments = skin->getAttachments();
+	SkinEntries attachments = skin->getAttachments();
 
 	while (attachments.hasNext()) {
-		Skin::AttachmentMap::Entry entry = attachments.next();
+		SkinEntry entry = attachments.next();
 		if (entry._slotIndex == slotIndex) {
 			Attachment *value = entry._attachment;
 			sortPathConstraintAttachment(value, slotBone);
