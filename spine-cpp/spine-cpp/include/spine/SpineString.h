@@ -70,6 +70,9 @@ namespace spine {
 			}
 		}
 
+		String(void* pOther):String(* (static_cast<String*>(pOther)) ) {
+		}
+
 		size_t length() const {
 			return _length;
 		}
