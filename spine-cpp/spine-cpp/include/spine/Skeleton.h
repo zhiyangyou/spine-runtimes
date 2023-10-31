@@ -202,6 +202,8 @@ namespace spine {
 
 		Color &getColor();
 
+		void setColor(float r, float g, float b, float a);
+
 		void setPosition(float x, float y);
 
 		float getX();

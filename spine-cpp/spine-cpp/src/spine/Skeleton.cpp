@@ -683,3 +683,11 @@ void Skeleton::sortReset(Vector<Bone *> &bones) {
 		bone->_sorted = false;
 	}
 }
+
+void Skeleton::setColor(float r, float g, float b, float a)
+{
+	_color.r = r;
+	_color.g = g;
+	_color.b = b;
+	_color.a = a;
+}
