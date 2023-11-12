@@ -33,6 +33,17 @@
 #include <spine/MathUtil.h>
 
 namespace spine {
+
+	union Color32 {
+		struct {
+			uint8_t r;
+			uint8_t g;
+			uint8_t b;
+			uint8_t a;
+		};
+		uint32_t rgba;
+	};
+
 	class SP_API Color : public SpineObject {
 	public:
 		Color() : r(0), g(0), b(0), a(0) {
