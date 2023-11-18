@@ -92,6 +92,10 @@ namespace spine {
 												   magFilter(TextureFilter_Nearest), uWrap(TextureWrap_ClampToEdge),
 												   vWrap(TextureWrap_ClampToEdge), width(0), height(0), pma(false), index(0), texture(NULL) {
 		}
+		//C++和C#通过Handle来索引托管对象
+		int32_t ConvertTexture2Handle() {
+			return (int32_t)texture;
+		}
 	};
 
 	class SP_API AtlasRegion : public TextureRegion {
