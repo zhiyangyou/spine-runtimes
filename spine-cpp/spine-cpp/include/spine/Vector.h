@@ -30,6 +30,8 @@
 #ifndef Spine_Vector_h
 #define Spine_Vector_h
 
+#include<initializer_list>
+
 #include <spine/Extension.h>
 #include <spine/SpineObject.h>
 #include <spine/SpineString.h>
@@ -39,7 +41,20 @@ namespace spine {
 	template<typename T>
 	class SP_API Vector : public SpineObject {
 	public:
-		Vector() : _size(0), _capacity(0), _buffer(NULL) {
+		
+		Vector() : _size(0), _capacity(0), _buffer(NULL) {}
+		Vector(std::initializer_list<T> list) : _size(list.size()), _capacity(list.size()) {
+			if (_capacity > 0) {
+				_buffer = allocate(_capacity);
+				auto it = list.begin();
+				for (size_t i = 0; i < _size; ++i) {
+					construct(_buffer + i, *it);
+					it++;
+				}
+			}
+			else {
+				_buffer = NULL;
+			}
 		}
 
 		Vector(const Vector &inVector) : _size(inVector._size), _capacity(inVector._capacity), _buffer(NULL) {

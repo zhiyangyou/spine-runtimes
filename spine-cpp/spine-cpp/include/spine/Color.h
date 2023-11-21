@@ -42,6 +42,11 @@ namespace spine {
 			uint8_t a;
 		};
 		uint32_t rgba;
+	public:
+		static Color32 DefaultV()
+		{
+			return{ 0, 0, 0, 0 };
+		}
 	};
 
 	class SP_API Color : public SpineObject {
@@ -53,7 +58,7 @@ namespace spine {
 			clamp();
 		}
 
-		inline Color &set(float _r, float _g, float _b, float _a) {
+		inline Color& set(float _r, float _g, float _b, float _a) {
 			this->r = _r;
 			this->g = _g;
 			this->b = _b;
@@ -62,7 +67,7 @@ namespace spine {
 			return *this;
 		}
 
-		inline Color &set(float _r, float _g, float _b) {
+		inline Color& set(float _r, float _g, float _b) {
 			this->r = _r;
 			this->g = _g;
 			this->b = _b;
@@ -70,7 +75,7 @@ namespace spine {
 			return *this;
 		}
 
-		inline Color &set(const Color &other) {
+		inline Color& set(const Color& other) {
 			r = other.r;
 			g = other.g;
 			b = other.b;
@@ -79,7 +84,7 @@ namespace spine {
 			return *this;
 		}
 
-		inline Color &add(float _r, float _g, float _b, float _a) {
+		inline Color& add(float _r, float _g, float _b, float _a) {
 			this->r += _r;
 			this->g += _g;
 			this->b += _b;
@@ -88,7 +93,7 @@ namespace spine {
 			return *this;
 		}
 
-		inline Color &add(float _r, float _g, float _b) {
+		inline Color& add(float _r, float _g, float _b) {
 			this->r += _r;
 			this->g += _g;
 			this->b += _b;
@@ -96,7 +101,7 @@ namespace spine {
 			return *this;
 		}
 
-		inline Color &add(const Color &other) {
+		inline Color& add(const Color& other) {
 			r += other.r;
 			g += other.g;
 			b += other.b;
@@ -105,7 +110,7 @@ namespace spine {
 			return *this;
 		}
 
-		inline Color &clamp() {
+		inline Color& clamp() {
 			r = MathUtil::clamp(this->r, 0, 1);
 			g = MathUtil::clamp(this->g, 0, 1);
 			b = MathUtil::clamp(this->b, 0, 1);
