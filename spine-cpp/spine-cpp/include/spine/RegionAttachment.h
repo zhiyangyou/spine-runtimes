@@ -117,7 +117,7 @@ namespace spine {
 
 		virtual Attachment *copy();
 
-	private:
+	public:
 		static const int BLX;
 		static const int BLY;
 		static const int ULX;
@@ -126,7 +126,7 @@ namespace spine {
 		static const int URY;
 		static const int BRX;
 		static const int BRY;
-
+	private:
 		float _x, _y, _rotation, _scaleX, _scaleY, _width, _height;
 		Vector<float> _vertexOffset;
 		Vector<float> _uvs;
