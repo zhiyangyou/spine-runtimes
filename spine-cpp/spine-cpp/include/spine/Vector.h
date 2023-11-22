@@ -87,6 +87,22 @@ namespace spine {
 			return _size;
 		}
 
+		//调用这个方法的时候，务必清楚自己在干什么。
+		inline void setSizeDirectlyAndEnsureCapcity(size_t newSize) {
+			assert(newSize >= 0);
+			size_t oldSize = _size;
+			_size = newSize;
+			if (_capacity < newSize) {
+				_capacity = (int)(_size * 1.75f);
+				if (_capacity < 8) _capacity = 8;
+				_buffer = spine::SpineExtension::realloc<T>(_buffer, _capacity, __FILE__, __LINE__);
+			}
+		}
+
+		//调用这个方法的时候，务必清楚自己在干什么。
+		inline void setSizeDirectly(size_t newSize) {
+			_size = newSize;
+		}
 		inline void setSize(size_t newSize, const T &defaultValue) {
 			assert(newSize >= 0);
 			size_t oldSize = _size;
