@@ -36,12 +36,13 @@
 #include <spine/SpineObject.h>
 #include <spine/SpineString.h>
 #include <assert.h>
+#include <functional>
 
 namespace spine {
 	template<typename T>
 	class SP_API Vector : public SpineObject {
 	public:
-		
+
 		Vector() : _size(0), _capacity(0), _buffer(NULL) {}
 		Vector(std::initializer_list<T> list) : _size(list.size()), _capacity(list.size()) {
 			if (_capacity > 0) {
@@ -57,7 +58,7 @@ namespace spine {
 			}
 		}
 
-		Vector(const Vector &inVector) : _size(inVector._size), _capacity(inVector._capacity), _buffer(NULL) {
+		Vector(const Vector& inVector) : _size(inVector._size), _capacity(inVector._capacity), _buffer(NULL) {
 			if (_capacity > 0) {
 				_buffer = allocate(_capacity);
 				for (size_t i = 0; i < _size; ++i) {
@@ -88,27 +89,28 @@ namespace spine {
 		}
 
 		//调用这个方法的时候，务必清楚自己在干什么。
-		inline void setSizeDirectlyAndEnsureCapcity(size_t newSize) {
+		//inline void setSizeDirectlyAndEnsureCapcity(size_t newSize) {
+		//	assert(newSize >= 0);
+		//	size_t oldSize = _size;
+		//	_size = newSize;
+		//	if (_capacity < newSize) {
+		//		_capacity = (int)(_size * 1.75f);
+		//		if (_capacity < 8) _capacity = 8;
+		//		_buffer = spine::SpineExtension::realloc<T>(_buffer, _capacity, __FILE__, __LINE__);
+		//	}
+		//}
+
+		////调用这个方法的时候，务必清楚自己在干什么。
+		//inline void setSizeDirectly(size_t newSize) {
+		//	_size = newSize;
+		//}
+
+		inline void setSize(size_t newSize, const T& defaultValue) {
 			assert(newSize >= 0);
 			size_t oldSize = _size;
 			_size = newSize;
 			if (_capacity < newSize) {
 				_capacity = (int)(_size * 1.75f);
-				if (_capacity < 8) _capacity = 8;
-				_buffer = spine::SpineExtension::realloc<T>(_buffer, _capacity, __FILE__, __LINE__);
-			}
-		}
-
-		//调用这个方法的时候，务必清楚自己在干什么。
-		inline void setSizeDirectly(size_t newSize) {
-			_size = newSize;
-		}
-		inline void setSize(size_t newSize, const T &defaultValue) {
-			assert(newSize >= 0);
-			size_t oldSize = _size;
-			_size = newSize;
-			if (_capacity < newSize) {
-				_capacity = (int) (_size * 1.75f);
 				if (_capacity < 8) _capacity = 8;
 				_buffer = spine::SpineExtension::realloc<T>(_buffer, _capacity, __FILE__, __LINE__);
 			}
@@ -119,36 +121,60 @@ namespace spine {
 			}
 		}
 
+		inline void setSizeWithFunc(size_t newSize, std::function<void(void*)> func) {
+			assert(newSize >= 0);
+			size_t oldSize = _size;
+			_size = newSize;
+			if (_capacity < newSize) {
+				_capacity = (int)(_size * 1.75f);
+				if (_capacity < 8) _capacity = 8;
+				_buffer = spine::SpineExtension::realloc<T>(_buffer, _capacity, __FILE__, __LINE__);
+			}
+			if (oldSize < _size) {
+				for (size_t i = oldSize; i < _size; i++) {
+					func(_buffer + i);
+				}
+			}
+		}
+
 		inline void ensureCapacity(size_t newCapacity = 0) {
 			if (_capacity >= newCapacity) return;
 			_capacity = newCapacity;
 			_buffer = SpineExtension::realloc<T>(_buffer, newCapacity, __FILE__, __LINE__);
 		}
 
-		inline void add(const T &inValue) {
+		inline void add(const T& inValue) {
 			if (_size == _capacity) {
 				// inValue might reference an element in this buffer
 				// When we reallocate, the reference becomes invalid.
 				// We thus need to create a defensive copy before
 				// reallocating.
 				T valueCopy = inValue;
-				_capacity = (int) (_size * 1.75f);
+				_capacity = (int)(_size * 1.75f);
 				if (_capacity < 8) _capacity = 8;
 				_buffer = spine::SpineExtension::realloc<T>(_buffer, _capacity, __FILE__, __LINE__);
 				construct(_buffer + _size++, valueCopy);
-			} else {
+			}
+			else {
 				construct(_buffer + _size++, inValue);
 			}
 		}
 
-		inline void addAll(Vector<T> &inValue) {
+		inline void addAll(Vector<T>& inValue) {
 			ensureCapacity(this->size() + inValue.size());
 			for (size_t i = 0; i < inValue.size(); i++) {
 				add(inValue[i]);
 			}
 		}
 
-		inline void clearAndAddAll(Vector<T> &inValue) {
+		inline void addAll(size_t size, T& defaultV) {
+			ensureCapacity(this->size() + size);
+			for (size_t i = 0; i < size; i++) {
+				add(defaultV);
+			}
+		}
+
+		inline void clearAndAddAll(Vector<T>& inValue) {
 			this->clear();
 			this->addAll(inValue);
 		}
@@ -169,7 +195,7 @@ namespace spine {
 			destroy(_buffer + _size);
 		}
 
-		inline bool contains(const T &inValue) {
+		inline bool contains(const T& inValue) {
 			for (size_t i = 0; i < _size; ++i) {
 				if (_buffer[i] == inValue) {
 					return true;
@@ -179,23 +205,23 @@ namespace spine {
 			return false;
 		}
 
-		inline int indexOf(const T &inValue) {
+		inline int indexOf(const T& inValue) {
 			for (size_t i = 0; i < _size; ++i) {
 				if (_buffer[i] == inValue) {
-					return (int) i;
+					return (int)i;
 				}
 			}
 
 			return -1;
 		}
 
-		inline T &operator[](size_t inIndex) {
+		inline T& operator[](size_t inIndex) {
 			assert(inIndex < _size);
 
 			return _buffer[inIndex];
 		}
 
-		inline friend bool operator==(Vector<T> &lhs, Vector<T> &rhs) {
+		inline friend bool operator==(Vector<T>& lhs, Vector<T>& rhs) {
 			if (lhs.size() != rhs.size()) {
 				return false;
 			}
@@ -209,11 +235,11 @@ namespace spine {
 			return true;
 		}
 
-		inline friend bool operator!=(Vector<T> &lhs, Vector<T> &rhs) {
+		inline friend bool operator!=(Vector<T>& lhs, Vector<T>& rhs) {
 			return !(lhs == rhs);
 		}
 
-		inline T *buffer() {
+		inline T* buffer() {
 			return _buffer;
 		}
 
@@ -224,29 +250,29 @@ namespace spine {
 	private:
 		size_t _size;
 		size_t _capacity;
-		T *_buffer;
+		T* _buffer;
 
-		inline T *allocate(size_t n) {
+		inline T* allocate(size_t n) {
 			assert(n > 0);
 
-			T *ptr = SpineExtension::calloc<T>(n, __FILE__, __LINE__);
+			T* ptr = SpineExtension::calloc<T>(n, __FILE__, __LINE__);
 
 			assert(ptr);
 
 			return ptr;
 		}
 
-		inline void deallocate(T *buffer) {
+		inline void deallocate(T* buffer) {
 			if (_buffer) {
 				SpineExtension::free(buffer, __FILE__, __LINE__);
 			}
 		}
 
-		inline void construct(T *buffer, const T &val) {
+		inline void construct(T* buffer, const T& val) {
 			new(buffer) T(val);
 		}
 
-		inline void destroy(T *buffer) {
+		inline void destroy(T* buffer) {
 			buffer->~T();
 		}
 
