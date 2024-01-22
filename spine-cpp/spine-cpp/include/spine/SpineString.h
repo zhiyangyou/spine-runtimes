@@ -58,6 +58,11 @@ namespace spine {
 			}
 		}
 
+		String(const void* pChars, bool own = false, bool tofree = true) {
+			const char* chars = static_cast<const char*>(pChars);
+			String(chars, own, tofree);
+		}
+
 		String(const String &other) {
 			_tempowner = true;
 			if (!other._buffer) {
