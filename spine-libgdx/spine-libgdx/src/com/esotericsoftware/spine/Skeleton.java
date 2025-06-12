@@ -157,7 +157,7 @@ public class Skeleton {
 		Slot[] slots = this.slots.items;
 		for (int i = 0, n = this.slots.size; i < n; i++) {
 			Slot slot = slots[i];
-			slot.applied = slot.pose;
+			slot.poseToApplied();
 		}
 
 		int boneCount = bones.size;
@@ -166,7 +166,7 @@ public class Skeleton {
 			Bone bone = bones[i];
 			bone.sorted = bone.data.skinRequired;
 			bone.active = !bone.sorted;
-			bone.applied = (BonePose)bone.pose;
+			bone.poseToApplied();
 		}
 		if (skin != null) {
 			BoneData[] skinBones = skin.bones.items;
@@ -184,7 +184,7 @@ public class Skeleton {
 		int n = this.constraints.size;
 		for (int i = 0; i < n; i++) {
 			Constraint constraint = constraints[i];
-			constraint.applied = constraint.pose;
+			constraint.poseToApplied();
 		}
 		for (int i = 0; i < n; i++) {
 			Constraint<?, ?, ?> constraint = constraints[i];
@@ -199,12 +199,12 @@ public class Skeleton {
 		Object[] updateCache = this.updateCache.items;
 		n = this.updateCache.size;
 		for (int i = 0; i < n; i++)
-			if (updateCache[i] instanceof Bone bone) updateCache[i] = bone.applied;
+			if (updateCache[i] instanceof Bone bone) updateCache[i] = bone.getAppliedPose();
 	}
 
 	void constrained (Posed object) {
-		if (object.pose == object.applied) {
-			object.applied = object.constrained;
+		if (object.getPose() == object.getAppliedPose()) {
+			object.constrainedToApplied();
 			resetCache.add(object);
 		}
 	}
@@ -238,7 +238,7 @@ public class Skeleton {
 		Posed[] resetCache = this.resetCache.items;
 		for (int i = 0, n = this.resetCache.size; i < n; i++) {
 			Posed object = resetCache[i];
-			object.applied.set(object.pose);
+			object.reset();
 		}
 
 		Object[] updateCache = this.updateCache.items;
@@ -259,11 +259,11 @@ public class Skeleton {
 		Posed[] resetCache = this.resetCache.items;
 		for (int i = 0, n = this.resetCache.size; i < n; i++) {
 			Posed object = resetCache[i];
-			object.applied.set(object.pose);
+			object.reset();
 		}
 
 		// Apply the parent bone transform to the root bone. The root bone always inherits scale, rotation and reflection.
-		BonePose rootBone = getRootBone().applied;
+		BonePose rootBone = getRootBone().getAppliedPose();
 		float pa = parent.a, pb = parent.b, pc = parent.c, pd = parent.d;
 		rootBone.worldX = pa * x + pb * y + parent.worldX;
 		rootBone.worldY = pc * x + pd * y + parent.worldY;
@@ -403,7 +403,7 @@ public class Skeleton {
 					String name = slot.data.attachmentName;
 					if (name != null) {
 						Attachment attachment = newSkin.getAttachment(i, name);
-						if (attachment != null) slot.pose.setAttachment(attachment);
+						if (attachment != null) slot.getPose().setAttachment(attachment);
 					}
 				}
 			}
@@ -449,7 +449,7 @@ public class Skeleton {
 			if (attachment == null)
 				throw new IllegalArgumentException("Attachment not found: " + attachmentName + ", for slot: " + slotName);
 		}
-		slot.pose.setAttachment(attachment);
+		slot.getPose().setAttachment(attachment);
 	}
 
 	/** The skeleton's constraints. */
@@ -498,7 +498,7 @@ public class Skeleton {
 			int verticesLength = 0;
 			float[] vertices = null;
 			short[] triangles = null;
-			Attachment attachment = slot.pose.attachment;
+			Attachment attachment = slot.getPose().attachment;
 			if (attachment != null) {
 				if (attachment instanceof RegionAttachment region) {
 					verticesLength = 8;

@@ -7,11 +7,11 @@ abstract public class Posed< //
 	A extends P> {
 
 	final D data;
-	final P pose;
-	final A constrained;
-	A applied;
+	protected final A pose;
+	protected final A constrained;
+	protected A applied;
 
-	public Posed (D data, P pose, A constrained) {
+	public Posed (D data, A pose, A constrained) {
 		if (data == null) throw new IllegalArgumentException("data cannot be null.");
 		this.data = data;
 		this.pose = pose;
@@ -32,8 +32,26 @@ abstract public class Posed< //
 		return pose;
 	}
 
+	protected A getConstrainedPose () {
+		return constrained;
+	}
+
 	public A getAppliedPose () {
 		return applied;
+	}
+
+	/** Resets applied to the pose via Pose.set() **/
+	public void reset () {
+		applied.set(pose);
+	}
+
+	/** applied points at pose **/
+	public void poseToApplied () {
+		applied = pose;
+	}
+
+	public void constrainedToApplied () {
+		applied = constrained;
 	}
 
 	public String toString () {
