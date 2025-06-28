@@ -50,7 +50,7 @@ size_t SkeletonClipping::clipStart(Slot &slot, ClippingAttachment *clip) {
 
 	int n = (int) clip->getWorldVerticesLength();
 	_clippingPolygon.setSize(n, 0);
-	clip->computeWorldVertices(slot, 0, n, _clippingPolygon, 0, 2);
+	clip->computeWorldVertices(slot, 0, n, _clippingPolygon, 0);
 	makeClockwise(_clippingPolygon);
 	_clippingPolygons = &_triangulator.decompose(_clippingPolygon, _triangulator.triangulate(_clippingPolygon));
 

@@ -54,12 +54,12 @@ void VertexAttachment::computeWorldVertices(Slot &slot, float *worldVertices) {
 }
 
 void VertexAttachment::computeWorldVertices(Slot &slot, size_t start, size_t count, Vector<float> &worldVertices,
-											size_t offset, size_t stride) {
-	computeWorldVertices(slot, start, count, worldVertices.buffer(), offset, stride);
+											size_t offset) {
+	computeWorldVertices(slot, start, count, worldVertices.buffer(), offset);
 }
 
-void VertexAttachment::computeWorldVertices(Slot &slot, size_t start, size_t count, float *worldVertices, size_t offset,
-											size_t stride) {
+void VertexAttachment::computeWorldVertices(Slot &slot, size_t start, size_t count, float *worldVertices, size_t offset) {
+    constexpr int stride = 3; // 直接认为是3维顶点
 	count = offset + (count >> 1) * stride;
 	Skeleton &skeleton = slot._bone._skeleton;
 	Vector<float> *deformArray = &slot.getDeform();
@@ -77,6 +77,7 @@ void VertexAttachment::computeWorldVertices(Slot &slot, size_t start, size_t cou
 			float vy = (*vertices)[vv + 1];
 			worldVertices[w] = vx * a + vy * b + x;
 			worldVertices[w + 1] = vx * c + vy * d + y;
+			worldVertices[w + 2] = 0;
 		}
 		return;
 	}
@@ -105,6 +106,7 @@ void VertexAttachment::computeWorldVertices(Slot &slot, size_t start, size_t cou
 			}
 			worldVertices[w] = wx;
 			worldVertices[w + 1] = wy;
+			worldVertices[w + 2] = 0;
 		}
 	} else {
 		for (size_t w = offset, b = skip * 3, f = skip << 1; w < count; w += stride) {
@@ -122,6 +124,7 @@ void VertexAttachment::computeWorldVertices(Slot &slot, size_t start, size_t cou
 			}
 			worldVertices[w] = wx;
 			worldVertices[w + 1] = wy;
+			worldVertices[w + 2] = 0;
 		}
 	}
 }

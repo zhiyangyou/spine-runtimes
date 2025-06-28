@@ -55,8 +55,7 @@ namespace spine {
 
 		using VertexAttachment::computeWorldVertices;
 
-		virtual void computeWorldVertices(Slot &slot, size_t start, size_t count, float *worldVertices, size_t offset,
-		size_t stride = 2);
+		virtual void computeWorldVertices(Slot &slot, size_t start, size_t count, float *worldVertices, size_t offset);
 
 		void updateRegion();
 
