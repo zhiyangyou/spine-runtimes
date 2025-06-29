@@ -127,14 +127,15 @@ void RegionAttachment::updateRegion() {
 	}
 }
 
-void RegionAttachment::computeWorldVertices(Slot &slot, Vector<float> &worldVertices, size_t offset, size_t stride) {
+void RegionAttachment::computeWorldVertices(Slot &slot, Vector<float> &worldVertices, size_t offset) {
 	assert(worldVertices.size() >= (offset + 8));
-	computeWorldVertices(slot, worldVertices.buffer(), offset, stride);
+	computeWorldVertices(slot, worldVertices.buffer(), offset);
 }
 
-void RegionAttachment::computeWorldVertices(Slot &slot, float *worldVertices, size_t offset, size_t stride) {
+void RegionAttachment::computeWorldVertices(Slot &slot, float *worldVertices, size_t offset) {
 	if (_sequence) _sequence->apply(&slot, this);
 
+    int stride = 3;
 	Bone &bone = slot.getBone();
 	float x = bone.getWorldX(), y = bone.getWorldY();
 	float a = bone.getA(), b = bone.getB(), c = bone.getC(), d = bone.getD();
@@ -144,24 +145,28 @@ void RegionAttachment::computeWorldVertices(Slot &slot, float *worldVertices, si
 	offsetY = _vertexOffset[BRY];
 	worldVertices[offset] = offsetX * a + offsetY * b + x;// br
 	worldVertices[offset + 1] = offsetX * c + offsetY * d + y;
+	worldVertices[offset + 2] = 0;
 	offset += stride;
 
 	offsetX = _vertexOffset[BLX];
 	offsetY = _vertexOffset[BLY];
 	worldVertices[offset] = offsetX * a + offsetY * b + x;// bl
 	worldVertices[offset + 1] = offsetX * c + offsetY * d + y;
+    worldVertices[offset + 2] = 0;
 	offset += stride;
 
 	offsetX = _vertexOffset[ULX];
 	offsetY = _vertexOffset[ULY];
 	worldVertices[offset] = offsetX * a + offsetY * b + x;// ul
 	worldVertices[offset + 1] = offsetX * c + offsetY * d + y;
+    worldVertices[offset + 2] = 0;
 	offset += stride;
 
 	offsetX = _vertexOffset[URX];
 	offsetY = _vertexOffset[URY];
 	worldVertices[offset] = offsetX * a + offsetY * b + x;// ur
 	worldVertices[offset + 1] = offsetX * c + offsetY * d + y;
+    worldVertices[offset + 2] = 0;
 }
 
 float RegionAttachment::getX() {

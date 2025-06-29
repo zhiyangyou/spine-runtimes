@@ -65,9 +65,9 @@ namespace spine {
 		/// @param worldVertices The output world vertices. Must have a length greater than or equal to offset + 8.
 		/// @param offset The worldVertices index to begin writing values.
 		/// @param stride The number of worldVertices entries between the value pairs written.
-		void computeWorldVertices(Slot &slot, float *worldVertices, size_t offset, size_t stride = 2);
+		void computeWorldVertices(Slot &slot, float *worldVertices, size_t offset);
 
-		void computeWorldVertices(Slot &slot, Vector<float> &worldVertices, size_t offset, size_t stride = 2);
+		void computeWorldVertices(Slot &slot, Vector<float> &worldVertices, size_t offset);
 
 		float getX();
 
