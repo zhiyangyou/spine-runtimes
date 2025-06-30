@@ -66,7 +66,13 @@ namespace spine {
 
 			_size = 0;
 		}
-		
+
+	    const T& last()
+		{
+		    auto& l =  _buffer[_size-1];
+		    return l;
+		}
+	    
 		inline size_t getCapacity() const {
 			return _capacity;
 		}
@@ -75,6 +81,13 @@ namespace spine {
 			return _size;
 		}
 
+	    inline void setSizeIncreaseUnsafe(size_t increaseSize){
+		    auto newSize = _size + increaseSize;
+		    assert(newSize >= 0);
+		    ensureCapacity(newSize);
+		    _size = newSize;
+		}
+	    
 	    //为了更快对拷数据,故添加这样1个方法
 	    inline void setSizeUnsafe(size_t newSize){
 		    assert(newSize >= 0);
