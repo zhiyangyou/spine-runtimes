@@ -35,6 +35,12 @@
 namespace spine {
 	class SP_API Color : public SpineObject {
 	public:
+		static Color white() {
+			return {1, 1, 1, 1};
+		}
+		static Color clear() {
+			return {0,0,0,0};
+		}
 		Color() : r(0), g(0), b(0), a(0) {
 		}
 
@@ -102,6 +108,15 @@ namespace spine {
 			return *this;
 		}
 
+	    // 重载 == 运算符
+	    bool operator==(const Color& other) const {
+		    return 
+                r == other.r && 
+                g == other.g && 
+                b == other.b && 
+                a == other.a;
+		}
+	    
 		float r, g, b, a;
 	};
 }
