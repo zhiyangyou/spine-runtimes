@@ -32,24 +32,33 @@
 
 using namespace spine;
 
-RTTI::RTTI(const char *className) : _className(className), _pBaseRTTI(NULL) {
+
+
+RTTI::RTTI(const char *className, TypeID classID) : _className(className), _classID(classID), _pBaseRTTI(NULL) {
 }
 
-RTTI::RTTI(const char *className, const RTTI &baseRTTI) : _className(className), _pBaseRTTI(&baseRTTI) {
+RTTI::RTTI(const char *className, TypeID classID, const RTTI &baseRTTI) : _className(className), _classID(classID), _pBaseRTTI(&baseRTTI) {
 }
 
 const char *RTTI::getClassName() const {
 	return _className;
 }
 
+TypeID RTTI::getClassID() const {
+    return _classID;
+}
+
 bool RTTI::isExactly(const RTTI &rtti) const {
-	return !strcmp(this->_className, rtti._className);
+	// return !strcmp(this->_className, rtti._className);
+    return this->_classID == rtti._classID;
 }
 
 bool RTTI::instanceOf(const RTTI &rtti) const {
 	const RTTI *pCompare = this;
+    const TypeID targetID = rtti._classID; // 获取一次目标ID
 	while (pCompare) {
-		if (!strcmp(pCompare->_className, rtti._className)) return true;
+		// if (!strcmp(pCompare->_className, rtti._className)) return true;
+	    if (pCompare->_classID == targetID) return true;
 		pCompare = pCompare->_pBaseRTTI;
 	}
 	return false;

@@ -32,15 +32,31 @@
 
 #include <spine/dll.h>
 
+
 namespace spine {
+
+    using TypeID = size_t;
+
+ 
+    constexpr TypeID ConstexprHash(const char* str) {
+        TypeID hash = 5381;  
+        while (*str) {
+        
+            hash = ((hash << 5) + hash) + (*str++);
+        }
+        return hash;
+    }
+    
 	class SP_API RTTI {
 	public:
-		explicit RTTI(const char *className);
+        explicit RTTI(const char *className, TypeID classID);
 
-		RTTI(const char *className, const RTTI &baseRTTI);
+        RTTI(const char *className, TypeID classID, const RTTI &baseRTTI);
 
 		const char *getClassName() const;
 
+        TypeID getClassID() const;
+        
 		bool isExactly(const RTTI &rtti) const;
 
 		bool instanceOf(const RTTI &rtti) const;
@@ -52,6 +68,7 @@ namespace spine {
 		RTTI &operator=(const RTTI &obj);
 
 		const char *_className;
+        const TypeID _classID;
 		const RTTI *_pBaseRTTI;
 	};
 }
@@ -62,11 +79,11 @@ static const spine::RTTI rtti; \
 virtual const spine::RTTI& getRTTI() const;
 
 #define RTTI_IMPL_NOPARENT(name) \
-const spine::RTTI name::rtti(#name); \
+const spine::RTTI name::rtti(#name, spine::ConstexprHash(#name)); \
 const spine::RTTI& name::getRTTI() const { return rtti; }
 
 #define RTTI_IMPL(name, parent) \
-const spine::RTTI name::rtti(#name, parent::rtti); \
+const spine::RTTI name::rtti(#name, spine::ConstexprHash(#name), parent::rtti); \
 const spine::RTTI& name::getRTTI() const { return rtti; }
 
 #endif /* Spine_RTTI_h */
