@@ -37,6 +37,15 @@
 #pragma warning(disable : 4723)
 #endif
 
+#define USE_GLM_MATH true
+#if USE_GLM_MATH
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/fast_trigonometry.hpp>
+#include <glm/gtx/fast_square_root.hpp>
+#include <glm/gtx/fast_exponential.hpp>
+#endif
+
+
 using namespace spine;
 
 const float MathUtil::Pi = 3.1415926535897932385f;
@@ -65,39 +74,75 @@ float MathUtil::fmod(float a, float b) {
 /// Returns atan2 in radians, faster but less accurate than Math.Atan2. Average error of 0.00231 radians (0.1323
 /// degrees), largest error of 0.00488 radians (0.2796 degrees).
 float MathUtil::atan2(float y, float x) {
+#if USE_GLM_MATH
+    return glm::fastAtan(y, x);
+#elif
 	return (float) ::atan2(y, x);
+#endif
 }
 
 float MathUtil::atan2Deg(float y, float x) {
-	return MathUtil::atan2(y, x) * MathUtil::Rad_Deg;
+#if USE_GLM_MATH
+    return glm::fastAtan(y, x)* MathUtil::Rad_Deg;
+#elif
+    return MathUtil::atan2(y, x) * MathUtil::Rad_Deg;
+#endif
 }
 
 /// Returns the cosine in radians from a lookup table.
 float MathUtil::cos(float radians) {
-	return (float) ::cos(radians);
+#if USE_GLM_MATH
+    return glm::fastAcos(radians);
+#elif
+    return (float) ::cos(radians);
+#endif
+	
 }
 
 /// Returns the sine in radians from a lookup table.
 float MathUtil::sin(float radians) {
-	return (float) ::sin(radians);
+#if USE_GLM_MATH
+    return glm::fastSin(radians);
+#elif
+    return (float) ::sin(radians);
+#endif
 }
 
 float MathUtil::sqrt(float v) {
-	return (float) ::sqrt(v);
+#if USE_GLM_MATH
+    return glm::fastSqrt(v);
+#elif
+    return (float) ::sqrt(v);
+#endif
+    // fast sqrt ... 
+    
 }
 
 float MathUtil::acos(float v) {
-	return (float) ::acos(v);
+#if USE_GLM_MATH
+    return glm::fastAcos(v);
+#elif
+    return (float) ::acos(v);
+#endif
 }
 
 /// Returns the sine in radians from a lookup table.
 float MathUtil::sinDeg(float degrees) {
-	return (float) ::sin(degrees * MathUtil::Deg_Rad);
+#if USE_GLM_MATH
+    return glm::fastSin(degrees * MathUtil::Deg_Rad);
+#elif
+    return (float) ::sin(degrees * MathUtil::Deg_Rad);
+#endif
 }
 
 /// Returns the cosine in radians from a lookup table.
 float MathUtil::cosDeg(float degrees) {
-	return (float) ::cos(degrees * MathUtil::Deg_Rad);
+#if USE_GLM_MATH
+    return glm::fastCos(degrees * MathUtil::Deg_Rad);
+#elif
+    return (float) ::cos(degrees * MathUtil::Deg_Rad);
+#endif
+	
 }
 
 bool MathUtil::isNan(float v) {
@@ -124,7 +169,11 @@ float MathUtil::randomTriangular(float min, float max, float mode) {
 }
 
 float MathUtil::pow(float a, float b) {
-	return (float) ::pow(a, b);
+#if USE_GLM_MATH
+    return glm::fastPow(a, b);
+#elif
+    return (float) ::pow(a, b);
+#endif
 }
 
 float MathUtil::ceil(float v) {
