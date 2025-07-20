@@ -56,49 +56,49 @@ namespace spine {
 		template<typename T>
 		static inline T max(T a, T b) { return a > b ? a : b; }
 
-		static float sign(float val);
+		static inline float sign(float val);
 
-		static float clamp(float x, float lower, float upper);
+		static inline float clamp(float x, float lower, float upper);
 
-		static float abs(float v);
-
-		/// Returns the sine in radians from a lookup table.
-		static float sin(float radians);
-
-		/// Returns the cosine in radians from a lookup table.
-		static float cos(float radians);
+		static inline float abs(float v);
 
 		/// Returns the sine in radians from a lookup table.
-		static float sinDeg(float degrees);
+		static inline float sin(float radians);
 
 		/// Returns the cosine in radians from a lookup table.
-		static float cosDeg(float degrees);
+		static inline float cos(float radians);
+
+		/// Returns the sine in radians from a lookup table.
+		static inline float sinDeg(float degrees);
+
+		/// Returns the cosine in radians from a lookup table.
+		static inline float cosDeg(float degrees);
 
 		/// Returns atan2 in radians, faster but less accurate than Math.Atan2. Average error of 0.00231 radians (0.1323
 		/// degrees), largest error of 0.00488 radians (0.2796 degrees).
-		static float atan2(float y, float x);
+		static inline float atan2(float y, float x);
 
-        static float atan2Deg(float x, float y);
+        static inline float atan2Deg(float x, float y);
 
-		static float acos(float v);
+		static inline float acos(float v);
 
-		static float sqrt(float v);
+		static inline float sqrt(float v);
 
-		static float fmod(float a, float b);
+		static inline float fmod(float a, float b);
 
-		static bool isNan(float v);
+		static inline bool isNan(float v);
 
-        static float quietNan();
+        static inline float quietNan();
 
-		static float random();
+		static inline float random();
 
-		static float randomTriangular(float min, float max);
+		static inline float randomTriangular(float min, float max);
 
-		static float randomTriangular(float min, float max, float mode);
+		static inline float randomTriangular(float min, float max, float mode);
 
-		static float pow(float a, float b);
+		static inline float pow(float a, float b);
 
-        static float ceil(float v);
+        static inline float ceil(float v);
 	};
 
 	struct SP_API Interpolation {
