@@ -38,10 +38,10 @@
 #pragma warning(disable : 4723)
 #endif
 
-#ifdef  _MSC_VER //  msvc 编译器绑定的标准数学函数库比glm的要快 : glm大约830ms , std大约580ms
-#define USE_GLM_MATH 0
-#define USE_SIMD_MATH 0
-#endif
+// #ifdef  _MSC_VER //  msvc 编译器绑定的标准数学函数库比glm的要快 : glm大约830ms , std大约580ms
+// #define USE_GLM_MATH 0
+// #define USE_SIMD_MATH 0
+// #endif
 
 #if USE_GLM_MATH
 #define GLM_FORCE_INLINE 
@@ -64,12 +64,12 @@ const float MathUtil::InvPi_2 = 1 / MathUtil::Pi_2;
 const float MathUtil::Deg_Rad = (3.1415926535897932385f / 180.0f);
 const float MathUtil::Rad_Deg = (180.0f / 3.1415926535897932385f);
 
-inline float MathUtil::abs(float v)
+float MathUtil::abs(float v)
 {
     return ((v) < 0 ? -(v) : (v));
 }
 
-inline float MathUtil::sign(float v)
+float MathUtil::sign(float v)
 {
     return ((v) < 0
         ? -1.0f
@@ -78,19 +78,19 @@ inline float MathUtil::sign(float v)
         : 0.0f);
 }
 
-inline float MathUtil::clamp(float x, float min, float max)
+float MathUtil::clamp(float x, float min, float max)
 {
     return ((x) < (min) ? (min) : ((x) > (max) ? (max) : (x)));
 }
 
-inline float MathUtil::fmod(float a, float b)
+float MathUtil::fmod(float a, float b)
 {
     return (float)::fmod(a, b);
 }
 
 /// Returns atan2 in radians, faster but less accurate than Math.Atan2. Average error of 0.00231 radians (0.1323
 /// degrees), largest error of 0.00488 radians (0.2796 degrees).
-inline float MathUtil::atan2(float y, float x)
+float MathUtil::atan2(float y, float x)
 {
 #if USE_GLM_MATH
     return glm::fastAtan(y, x);
@@ -99,7 +99,7 @@ inline float MathUtil::atan2(float y, float x)
 #endif
 }
 
-inline float MathUtil::atan2Deg(float y, float x)
+float MathUtil::atan2Deg(float y, float x)
 {
 #if USE_GLM_MATH
     return glm::fastAtan(y, x)* MathUtil::Rad_Deg;
@@ -109,7 +109,7 @@ inline float MathUtil::atan2Deg(float y, float x)
 }
 
 /// Returns the cosine in radians from a lookup table.
-inline float MathUtil::cos(float radians)
+float MathUtil::cos(float radians)
 {
 #if USE_GLM_MATH
     return glm::fastCos(radians);
@@ -120,7 +120,7 @@ inline float MathUtil::cos(float radians)
 }
 
 /// Returns the sine in radians from a lookup table.
-inline float MathUtil::sin(float radians)
+float MathUtil::sin(float radians)
 {
 #if USE_GLM_MATH
     return glm::fastSin(radians);
@@ -129,7 +129,7 @@ inline float MathUtil::sin(float radians)
 #endif
 }
 
-inline float MathUtil::sqrt(float v)
+float MathUtil::sqrt(float v)
 {
 #if USE_GLM_MATH
     return glm::fastSqrt(v);
@@ -140,7 +140,7 @@ inline float MathUtil::sqrt(float v)
 
 }
 
-inline float MathUtil::acos(float v)
+float MathUtil::acos(float v)
 {
 #if USE_GLM_MATH
     return glm::fastAcos(v);
@@ -150,7 +150,7 @@ inline float MathUtil::acos(float v)
 }
 
 /// Returns the sine in radians from a lookup table.
-inline float MathUtil::sinDeg(float degrees)
+float MathUtil::sinDeg(float degrees)
 {
 #if USE_GLM_MATH
     return glm::fastSin(degrees * MathUtil::Deg_Rad);
@@ -160,7 +160,7 @@ inline float MathUtil::sinDeg(float degrees)
 }
 
 /// Returns the cosine in radians from a lookup table.
-inline float MathUtil::cosDeg(float degrees)
+float MathUtil::cosDeg(float degrees)
 {
 #if USE_GLM_MATH
     return glm::fastCos(degrees * MathUtil::Deg_Rad);
@@ -170,27 +170,27 @@ inline float MathUtil::cosDeg(float degrees)
 
 }
 
-inline bool MathUtil::isNan(float v)
+bool MathUtil::isNan(float v)
 {
     return std::isnan(v);
 }
 
-inline float MathUtil::quietNan()
+float MathUtil::quietNan()
 {
     return std::nan("");
 }
 
-inline float MathUtil::random()
+float MathUtil::random()
 {
     return ::rand() / (float)RAND_MAX;
 }
 
-inline float MathUtil::randomTriangular(float min, float max)
+float MathUtil::randomTriangular(float min, float max)
 {
     return randomTriangular(min, max, (min + max) * 0.5f);
 }
 
-inline float MathUtil::randomTriangular(float min, float max, float mode)
+float MathUtil::randomTriangular(float min, float max, float mode)
 {
     float u = random();
     float d = max - min;
@@ -199,7 +199,7 @@ inline float MathUtil::randomTriangular(float min, float max, float mode)
     return max - sqrt((1 - u) * d * (max - mode));
 }
 
-inline float MathUtil::pow(float a, float b)
+float MathUtil::pow(float a, float b)
 {
 #if USE_GLM_MATH
     return glm::fastPow(a, b);
@@ -208,7 +208,7 @@ inline float MathUtil::pow(float a, float b)
 #endif
 }
 
-inline float MathUtil::ceil(float v)
+float MathUtil::ceil(float v)
 {
     return ::ceil(v);
 }
