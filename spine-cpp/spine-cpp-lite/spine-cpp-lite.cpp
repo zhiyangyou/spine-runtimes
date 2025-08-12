@@ -70,13 +70,13 @@ typedef struct _spine_vector {
 	float x, y;
 } _spine_vector;
 
-typedef struct _spine_skeleton_drawable : public SpineObject {
-	spine_skeleton skeleton;
-	spine_animation_state animationState;
-	spine_animation_state_data animationStateData;
-	spine_animation_state_events animationStateEvents;
-	SkeletonRenderer *renderer;
-} _spine_skeleton_drawable;
+//typedef struct _spine_skeleton_drawable : public SpineObject {
+//	spine_skeleton skeleton;
+//	spine_animation_state animationState;
+//	spine_animation_state_data animationStateData;
+//	spine_animation_state_events animationStateEvents;
+//	SkeletonRenderer *renderer;
+//} _spine_skeleton_drawable;
 
 typedef struct _spine_skin_entry {
 	int32_t slotIndex;
@@ -101,10 +101,10 @@ static void initExtensions() {
 	}
 }
 
-spine::SpineExtension *spine::getDefaultExtension() {
-	initExtensions();
-	return defaultExtension;
-}
+//spine::SpineExtension *spine::getDefaultExtension() {
+//	initExtensions();
+//	return defaultExtension;
+//}
 
 void spine_enable_debug_extension(spine_bool enable) {
 	initExtensions();
@@ -603,110 +603,110 @@ void spine_skeleton_data_dispose(spine_skeleton_data data) {
 
 // SkeletonDrawable
 
-spine_skeleton_drawable spine_skeleton_drawable_create(spine_skeleton_data skeletonData) {
-	_spine_skeleton_drawable *drawable = new (__FILE__, __LINE__) _spine_skeleton_drawable();
-	drawable->skeleton = (spine_skeleton) new (__FILE__, __LINE__) Skeleton((SkeletonData *) skeletonData);
-	AnimationStateData *stateData = new (__FILE__, __LINE__) AnimationStateData((SkeletonData *) skeletonData);
-	drawable->animationStateData = (spine_animation_state_data) stateData;
-	AnimationState *state = new (__FILE__, __LINE__) AnimationState(stateData);
-	drawable->animationState = (spine_animation_state) state;
-	state->setManualTrackEntryDisposal(true);
-	EventListener *listener = new EventListener();
-	drawable->animationStateEvents = (spine_animation_state_events) listener;
-	state->setListener(listener);
-	drawable->renderer = new (__FILE__, __LINE__) SkeletonRenderer();
-	return (spine_skeleton_drawable) drawable;
-}
-
-void spine_skeleton_drawable_dispose(spine_skeleton_drawable drawable) {
-	_spine_skeleton_drawable *_drawable = (_spine_skeleton_drawable *) drawable;
-	if (!_drawable) return;
-	if (_drawable->skeleton) delete (Skeleton *) _drawable->skeleton;
-	if (_drawable->animationState) delete (AnimationState *) _drawable->animationState;
-	if (_drawable->animationStateData) delete (AnimationStateData *) _drawable->animationStateData;
-	if (_drawable->animationStateEvents) delete (Vector<AnimationStateEvent> *) (_drawable->animationStateEvents);
-	if (_drawable->renderer) delete (SkeletonRenderer *) _drawable->renderer;
-	SpineExtension::free(drawable, __FILE__, __LINE__);
-}
-
-spine_render_command spine_skeleton_drawable_render(spine_skeleton_drawable drawable) {
-	_spine_skeleton_drawable *_drawable = (_spine_skeleton_drawable *) drawable;
-	if (!_drawable) return nullptr;
-	if (!_drawable->skeleton) return nullptr;
-	if (!_drawable->renderer) return nullptr;
-	return (spine_render_command) _drawable->renderer->render(*(Skeleton *) _drawable->skeleton);
-}
-
-spine_skeleton spine_skeleton_drawable_get_skeleton(spine_skeleton_drawable drawable) {
-	if (!drawable) return nullptr;
-	return ((_spine_skeleton_drawable *) drawable)->skeleton;
-}
-
-spine_animation_state spine_skeleton_drawable_get_animation_state(spine_skeleton_drawable drawable) {
-	if (!drawable) return nullptr;
-	return ((_spine_skeleton_drawable *) drawable)->animationState;
-}
-
-spine_animation_state_data spine_skeleton_drawable_get_animation_state_data(spine_skeleton_drawable drawable) {
-	if (!drawable) return nullptr;
-	return ((_spine_skeleton_drawable *) drawable)->animationStateData;
-}
-
-spine_animation_state_events spine_skeleton_drawable_get_animation_state_events(spine_skeleton_drawable drawable) {
-	if (!drawable) return nullptr;
-	return ((_spine_skeleton_drawable *) drawable)->animationStateEvents;
-}
-
-// Render command
-float *spine_render_command_get_positions(spine_render_command command) {
-	if (!command) return nullptr;
-	return ((RenderCommand *) command)->positions;
-}
-
-float *spine_render_command_get_uvs(spine_render_command command) {
-	if (!command) return nullptr;
-	return ((RenderCommand *) command)->uvs;
-}
-
-int32_t *spine_render_command_get_colors(spine_render_command command) {
-	if (!command) return nullptr;
-	return (int32_t *) ((RenderCommand *) command)->colors;
-}
-
-int32_t *spine_render_command_get_dark_colors(spine_render_command command) {
-	if (!command) return nullptr;
-	return (int32_t *) ((RenderCommand *) command)->darkColors;
-}
-
-int32_t spine_render_command_get_num_vertices(spine_render_command command) {
-	if (!command) return 0;
-	return ((RenderCommand *) command)->numVertices;
-}
-
-uint16_t *spine_render_command_get_indices(spine_render_command command) {
-	if (!command) return nullptr;
-	return ((RenderCommand *) command)->indices;
-}
-
-int32_t spine_render_command_get_num_indices(spine_render_command command) {
-	if (!command) return 0;
-	return ((RenderCommand *) command)->numIndices;
-}
-
-int32_t spine_render_command_get_atlas_page(spine_render_command command) {
-	if (!command) return 0;
-	return (int32_t) (intptr_t) ((RenderCommand *) command)->texture;
-}
-
-spine_blend_mode spine_render_command_get_blend_mode(spine_render_command command) {
-	if (!command) return SPINE_BLEND_MODE_NORMAL;
-	return (spine_blend_mode) ((RenderCommand *) command)->blendMode;
-}
-
-spine_render_command spine_render_command_get_next(spine_render_command command) {
-	if (!command) return nullptr;
-	return (spine_render_command) ((RenderCommand *) command)->next;
-}
+//spine_skeleton_drawable spine_skeleton_drawable_create(spine_skeleton_data skeletonData) {
+//	_spine_skeleton_drawable *drawable = new (__FILE__, __LINE__) _spine_skeleton_drawable();
+//	drawable->skeleton = (spine_skeleton) new (__FILE__, __LINE__) Skeleton((SkeletonData *) skeletonData);
+//	AnimationStateData *stateData = new (__FILE__, __LINE__) AnimationStateData((SkeletonData *) skeletonData);
+//	drawable->animationStateData = (spine_animation_state_data) stateData;
+//	AnimationState *state = new (__FILE__, __LINE__) AnimationState(stateData);
+//	drawable->animationState = (spine_animation_state) state;
+//	state->setManualTrackEntryDisposal(true);
+//	EventListener *listener = new EventListener();
+//	drawable->animationStateEvents = (spine_animation_state_events) listener;
+//	state->setListener(listener);
+//	drawable->renderer = new (__FILE__, __LINE__) SkeletonRenderer();
+//	return (spine_skeleton_drawable) drawable;
+//}
+//
+//void spine_skeleton_drawable_dispose(spine_skeleton_drawable drawable) {
+//	_spine_skeleton_drawable *_drawable = (_spine_skeleton_drawable *) drawable;
+//	if (!_drawable) return;
+//	if (_drawable->skeleton) delete (Skeleton *) _drawable->skeleton;
+//	if (_drawable->animationState) delete (AnimationState *) _drawable->animationState;
+//	if (_drawable->animationStateData) delete (AnimationStateData *) _drawable->animationStateData;
+//	if (_drawable->animationStateEvents) delete (Vector<AnimationStateEvent> *) (_drawable->animationStateEvents);
+//	if (_drawable->renderer) delete (SkeletonRenderer *) _drawable->renderer;
+//	SpineExtension::free(drawable, __FILE__, __LINE__);
+//}
+//
+//spine_render_command spine_skeleton_drawable_render(spine_skeleton_drawable drawable) {
+//	_spine_skeleton_drawable *_drawable = (_spine_skeleton_drawable *) drawable;
+//	if (!_drawable) return nullptr;
+//	if (!_drawable->skeleton) return nullptr;
+//	if (!_drawable->renderer) return nullptr;
+//	return (spine_render_command) _drawable->renderer->render(*(Skeleton *) _drawable->skeleton);
+//}
+//
+//spine_skeleton spine_skeleton_drawable_get_skeleton(spine_skeleton_drawable drawable) {
+//	if (!drawable) return nullptr;
+//	return ((_spine_skeleton_drawable *) drawable)->skeleton;
+//}
+//
+//spine_animation_state spine_skeleton_drawable_get_animation_state(spine_skeleton_drawable drawable) {
+//	if (!drawable) return nullptr;
+//	return ((_spine_skeleton_drawable *) drawable)->animationState;
+//}
+//
+//spine_animation_state_data spine_skeleton_drawable_get_animation_state_data(spine_skeleton_drawable drawable) {
+//	if (!drawable) return nullptr;
+//	return ((_spine_skeleton_drawable *) drawable)->animationStateData;
+//}
+//
+//spine_animation_state_events spine_skeleton_drawable_get_animation_state_events(spine_skeleton_drawable drawable) {
+//	if (!drawable) return nullptr;
+//	return ((_spine_skeleton_drawable *) drawable)->animationStateEvents;
+//}
+//
+//// Render command
+//float *spine_render_command_get_positions(spine_render_command command) {
+//	if (!command) return nullptr;
+//	return ((RenderCommand *) command)->positions;
+//}
+//
+//float *spine_render_command_get_uvs(spine_render_command command) {
+//	if (!command) return nullptr;
+//	return ((RenderCommand *) command)->uvs;
+//}
+//
+//int32_t *spine_render_command_get_colors(spine_render_command command) {
+//	if (!command) return nullptr;
+//	return (int32_t *) ((RenderCommand *) command)->colors;
+//}
+//
+//int32_t *spine_render_command_get_dark_colors(spine_render_command command) {
+//	if (!command) return nullptr;
+//	return (int32_t *) ((RenderCommand *) command)->darkColors;
+//}
+//
+//int32_t spine_render_command_get_num_vertices(spine_render_command command) {
+//	if (!command) return 0;
+//	return ((RenderCommand *) command)->numVertices;
+//}
+//
+//uint16_t *spine_render_command_get_indices(spine_render_command command) {
+//	if (!command) return nullptr;
+//	return ((RenderCommand *) command)->indices;
+//}
+//
+//int32_t spine_render_command_get_num_indices(spine_render_command command) {
+//	if (!command) return 0;
+//	return ((RenderCommand *) command)->numIndices;
+//}
+//
+//int32_t spine_render_command_get_atlas_page(spine_render_command command) {
+//	if (!command) return 0;
+//	return (int32_t) (intptr_t) ((RenderCommand *) command)->texture;
+//}
+//
+//spine_blend_mode spine_render_command_get_blend_mode(spine_render_command command) {
+//	if (!command) return SPINE_BLEND_MODE_NORMAL;
+//	return (spine_blend_mode) ((RenderCommand *) command)->blendMode;
+//}
+//
+//spine_render_command spine_render_command_get_next(spine_render_command command) {
+//	if (!command) return nullptr;
+//	return (spine_render_command) ((RenderCommand *) command)->next;
+//}
 
 // Animation
 
